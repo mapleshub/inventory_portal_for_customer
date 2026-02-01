@@ -19,6 +19,7 @@
             "inventory_portal_for_customer/static/src/css/portal_inventory.css",
         ],
     },
+    "images": ["static/description/banner.png"],
     "installable": True,
     "application": False,
     "license": 'LGPL-3',
