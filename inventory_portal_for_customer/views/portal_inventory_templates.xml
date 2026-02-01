@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_inventory_category_node">
+        <t t-set="is_selected" t-value="selected_category_id == categ.id"/>
+        <!-- Safe auto-expand logic -->
+        <t t-set="sel_path" t-value="selected_category and selected_category.parent_path and ('/' + selected_category.parent_path) or ''"/>
+        <t t-set="is_in_path" t-value="sel_path and (('/%s/' % categ.id) in sel_path)"/>
+        <div class="categ-node my-1">
+            <div class="d-flex align-items-center justify-content-between">
+                <a t-att-href="keep(category_id=categ.id)"
+                   t-att-class="'categ-link ' + ((is_selected) and 'active' or '')">
+                    <!-- Full path like All / Saleable / Office -->
+                    <t t-esc="categ.complete_name"/>
+                </a>
+                <t t-if="categ.child_id">
+                    <button class="btn btn-sm btn-link p-0 categ-toggle"
+                            type="button"
+                            t-att-data-bs-toggle="'collapse'"
+                            t-att-data-bs-target="'#categ_children_%s' % categ.id"
+                            t-att-aria-controls="'categ_children_%s' % categ.id"
+                            t-att-aria-expanded="(is_in_path or is_selected) and 'true' or 'false'">
+                        <i class="fa fa-chevron-down"/>
+                    </button>
+                </t>
+            </div>
+            <t t-if="categ.child_id">
+                <div t-att-id="'categ_children_%s' % categ.id"
+                     t-att-class="'collapse categ-children ' + ((is_in_path or is_selected) and 'show' or '')">
+                    <t t-foreach="categ.child_id" t-as="child">
+                        <div class="ms-3">
+                            <t t-call="inventory_portal_for_customer.portal_inventory_category_node">
+                                <t t-set="categ" t-value="child"/>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </t>
+        </div>
+    </template>
+    <!-- Main portal inventory page -->
+    <template id="portal_inventory_page" name="Portal Inventory">
+        <t t-call="website.layout">
+            <div class="container my-4 portal-inventory">
+                <div class="row">
+                    <!-- LEFT: Categories -->
+                    <div class="col-lg-3 col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body bg-light text-dark">
+                                <h5 class="mb-3">Shop by Categories</h5>
+                                <hr/>
+                                <div class="portal-categ-tree" style="font-size: 14px;">
+                                    <t t-foreach="root_categs" t-as="root">
+                                        <t t-call="inventory_portal_for_customer.portal_inventory_category_node">
+                                            <t t-set="categ" t-value="root"/>
+                                        </t>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- RIGHT: Search + Products table -->
+                    <div class="col-lg-9 col-md-8">
+                        <div class="d-flex gap-2 mb-3">
+                            <form class="d-flex flex-grow-1" method="get" action="/my/inventory">
+                                <input class="form-control" type="text" name="search"
+                                       t-att-value="search" placeholder="Search..."/>
+                                <t t-if="selected_category_id">
+                                    <input type="hidden" name="category_id" t-att-value="selected_category_id"/>
+                                </t>
+                                <button class="btn btn-outline-secondary ms-2" type="submit">
+                                    <i class="fa fa-search"/>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <table class="table table-hover mb-0" style="font-size: 14px;">
+                                    <thead>
+                                        <tr class="bg-light text-dark">
+                                            <th style="width: 22%;">Ref</th>
+                                            <th>Name</th>
+                                            <th class="text-end" style="width: 12%;">QTY IN STOCK</th>
+                                            <th class="text-end" style="width: 12%;">Forecast QTY</th>
+                                            <th style="width: 14%;">Forecast ETA</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-if="products">
+                                            <t t-foreach="products" t-as="p">
+                                                <tr>
+                                                    <td class="text-break">
+                                                        <t t-esc="p['default_code']"/>
+                                                    </td>
+                                                    <td class="text-break">
+                                                        <t t-esc="p['name']"/>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <t t-esc="p['qty_on_hand']"/>
+                                                    </td>
+                                                    <td class="text-end">
+                                                        <t t-esc="p['forecast_qty']"/>
+                                                    </td>
+                                                    <td>
+                                                        <t t-esc="p['forecast_eta']"/>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                        </t>
+                                        <t t-else="">
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4 text-muted">
+                                                    No products found.
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="mt-3 d-flex justify-content-center">
+                            <t t-call="website.pager">
+                                <t t-set="pager" t-value="pager"/>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

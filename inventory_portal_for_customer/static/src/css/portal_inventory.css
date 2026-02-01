@@ -1,0 +1,37 @@
+git .portal-inventory .portal-categ-tree a {
+  display: block;
+  padding: 8px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+.portal-inventory .portal-categ-tree a.active {
+  background: #eef3ff;
+  font-weight: 600;
+}
+.portal-inventory .categ-children a {
+  margin-left: 14px;
+  font-size: 0.95em;
+  opacity: 0.95;
+}
+
+.portal-categ-tree .categ-link {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.portal-categ-tree .categ-link.active {
+  font-weight: 600;
+  background: rgba(0,0,0,0.06);
+}
+
+
+.portal-categ-tree .categ-node .d-flex{
+  gap: 8px;
+}
+
+.portal-categ-tree .categ-toggle{
+  flex: 0 0 auto;
+}
