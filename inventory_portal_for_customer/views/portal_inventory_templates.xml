@@ -46,7 +46,7 @@
                     <div class="col-lg-3 col-md-4 mb-3">
                         <div class="card">
                             <div class="card-body bg-light text-dark">
-                                <h5 class="mb-3">Shop by Categories</h5>
+                                <h5 class="mb-3">Product Categories</h5>
                                 <hr/>
                                 <div class="portal-categ-tree" style="font-size: 14px;">
                                     <t t-foreach="root_categs" t-as="root">
