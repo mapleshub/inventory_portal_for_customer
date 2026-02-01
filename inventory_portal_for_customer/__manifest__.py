@@ -2,8 +2,13 @@
     "name": "Inventory Portal for Customer",
     "version": "1.0",
     "category": "Website",
+    'author': "Mapleshub Solutions",
+    'maintainer': 'Mapleshub Solutions',
+    'company': 'Mapleshub Solutions',
+    'website': "https://www.mapleshub.com",
+    'support': 'service@mapleshub.com',
     "summary": "A secure, read-only inventory portal that allows customers to view product availability, "
-               "stock levels, and forecast quantities directly from Odoo—without backend access.",
+               "stock levels-without backend access.",
     "depends": ["website", "portal", "product", "stock"],
     "data": [
         "views/portal_inventory_templates.xml",
